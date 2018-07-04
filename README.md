@@ -89,7 +89,7 @@ productFlavors.all { flavor ->
 
 **3. 执行命令gradlew assembleRelease**
 
-----在Android Studio的Terminal输入命令行： **gradlew assembleRelease**，表示生成所有Release包，生成的包在app\build\outputs\apk目录下。
+----在Android Studio的Terminal输入命令： **gradlew assembleRelease**，表示生成所有Release包，生成的包在app\build\outputs\apk目录下。
 
 **assemble命令**
 
@@ -196,10 +196,12 @@ android {
  
     // 多渠道打包配置
     productFlavors {
+        uc {}
+        baidu {}
+        yyb {}
         kuan {}
         xiaomi {}
         qh360 {}
-        baidu {}
         wandoujia {}
     }
  
