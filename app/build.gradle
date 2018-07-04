@@ -1,0 +1,140 @@
+apply plugin: 'com.android.application'
+
+def packageTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "27.0.3"
+
+    defaultConfig {
+        applicationId "com.mtq.zqyunpack"
+        minSdkVersion 19
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true //dex突破65535限制
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file('keystore/debug.keystore')
+        }
+        release {
+            storeFile file('keystore/careland.keystore')
+            keyPassword 'careland2012'
+            storePassword 'careland2012'
+            keyAlias 'careland'
+        }
+    }
+
+    buildTypes {
+
+        release {
+            // 去除无用的resource
+            shrinkResources true
+            // Zipalign优化，内存对齐
+            zipAlignEnabled true
+            // 是否混淆
+            minifyEnabled true
+
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+
+            // 生成的包在app\build\outputs\apk目录下
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        // 输出appName_v1.0_2018-07-03_xxx.apk
+                        def fileName = "appName_v${defaultConfig.versionName}_${packageTime()}_${variant.productFlavors[0].name}.apk"
+                        output.outputFile = new File(outputFile.parent, fileName)
+
+                        // 输出apk名称为zhaoqy_v1.0_wandoujia.apk
+                        // def fileName = "zhaoqy_v${defaultConfig.versionName}_${variant.productFlavors[0].name}.apk"
+                        // output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
+            }
+        }
+
+        debug {
+            minifyEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.debug
+        }
+    }
+
+//    productFlavors {
+//        // UC
+//        uc {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "uc"]
+//        }
+//
+//        // 百度
+//        baidu {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "baidu"]
+//        }
+//
+//        // 应用宝
+//        yyb {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "yyb"]
+//        }
+//        // 酷安市场
+//        kuan {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "kuan"]
+//        }
+//
+//        // 小米
+//        xiaomi {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaomi"]
+//        }
+//
+//        // 360
+//        qh360 {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "qh360"]
+//        }
+//
+//        // 豌豆荚
+//        wandoujia {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
+//        }
+//    }
+    // 优化的格式
+    productFlavors {
+        uc {}
+        baidu {}
+        yyb {}
+        kuan {}
+        xiaomi {}
+        qh360 {}
+        wandoujia {}
+    }
+    productFlavors.all { flavor ->
+        flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    testCompile 'junit:junit:4.12'
+
+    // RecyclerView
+    compile 'com.android.support:recyclerview-v7:25.3.1'
+
+    // 沉浸式管理
+    compile 'com.gyf.barlibrary:barlibrary:2.2.9'
+
+    // 依赖注入
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+    // Android 工具类库
+    compile 'com.blankj:utilcode:1.13.4'
+}
