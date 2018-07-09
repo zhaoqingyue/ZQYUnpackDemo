@@ -221,4 +221,4 @@ dependencies {
 
 
 
-签名配置，见[Android Studio之gradle的buildTypes内部配置](https://github.com/zhaoqingyue/ZQYAndroidNotes/blob/master/Android%20Studio/Android_Studio%E4%B9%8Bgradle%E7%9A%84buildTypes%E9%85%8D%E7%BD%AE.md)。
+签名配置，见[Android Studio之Gradle签名配置](https://github.com/zhaoqingyue/ZQYAndroidNotes/blob/master/Android%20Gradle/Gradle%E7%AD%BE%E5%90%8D%E9%85%8D%E7%BD%AE.md)。
